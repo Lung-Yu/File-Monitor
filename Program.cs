@@ -11,6 +11,13 @@ namespace File_Monitor
         static void Main(string[] args)
         {
 
+            string mailTopic = "";
+            List<string> targets = new List<string>();
+            string mailContent = "";
+
+
+            MailService mailService = MailService.getInstance();
+            mailService.sendNoticeMail(mailTopic, targets.ToArray(), mailContent);
         }
     }
 }
