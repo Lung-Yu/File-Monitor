@@ -10,14 +10,6 @@ namespace File_Monitor
 {
     public class MailService
     {
-        private MailService()
-        {
-            // TODO: Add constructor logic here
-
-            string config_path = "config.xml";
-            ConfigParser configParser = new ConfigParser(config_path);
-        }
-
         private static MailService _Service = null;
 
         public static MailService getInstance()
@@ -26,21 +18,36 @@ namespace File_Monitor
                 _Service = new MailService();
             return _Service;
         }
-
+     
+        private ConfigParser configParser = null;
         private string SenderMailAddress { get; set; }
         private string ACCOUNT { get; set; }
         private string PASSWORD { get; set; }
         private string ValidMail { get; set; }
         private string Defalut_Mail_Topic { get; set; }
 
-        public void sendNoticeMail(string[] targets, string contents)
+        private MailService()
         {
-            this.sendNoticeMail(Defalut_Mail_Topic, targets, null, contents);
+            // TODO: Add constructor logic here
+
+            string config_path = "config.xml";
+            configParser = new ConfigParser(config_path);
+
+            SenderMailAddress = configParser.Mail_Address;
+            ACCOUNT = configParser.Mail_Account;
+            PASSWORD = configParser.Mail_Password;
+
+            Defalut_Mail_Topic = configParser.MailTopic;
         }
 
-        public void sendNoticeMail(string topic, string[] targets, string contents)
+
+        public void sendNoticeMail(string contents)
         {
-            this.sendNoticeMail(topic, targets, null, contents);
+            this.sendNoticeMail(
+                configParser.MailTopic,
+                configParser.To.ToArray(),
+                configParser.Cc.ToArray(),
+                contents);
         }
 
         public void sendNoticeMail(string topic, string[] targets, string[] cc, string contents)
