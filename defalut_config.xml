@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<config>
+     <mail_server>
+        <mail_topic>信件主旨</mail_topic>
+    </mail_server>
+     <monitor>
+         <check>checkFolder</check>
+         <ignore>ignoreFolder</ignore>
+         <ignore>ignoreFile</ignore>
+    </monitor>
+</config>

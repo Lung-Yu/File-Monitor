@@ -10,7 +10,10 @@ namespace File_Monitor
     {
         static void Main(string[] args)
         {
+            string config_path = "config.xml";
+            ConfigParser configParser = new ConfigParser(config_path);
 
+            Console.ReadLine();
         }
     }
 }
