@@ -10,12 +10,10 @@ namespace File_Monitor
     {
         static void Main(string[] args)
         {
-            //string config_path = "config.xml";
-            //ConfigParser configParser = new ConfigParser(config_path);
+         
 
-<<<<<<< HEAD
             Console.ReadLine();
-=======
+
             string mailTopic = "";
             List<string> targets = new List<string>();
             string mailContent = "";
@@ -23,7 +21,6 @@ namespace File_Monitor
 
             MailService mailService = MailService.getInstance();
             mailService.sendNoticeMail(mailTopic, targets.ToArray(), mailContent);
->>>>>>> mail
         }
     }
 }
