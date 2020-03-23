@@ -25,6 +25,9 @@ namespace File_Monitor
         private string PASSWORD { get; set; }
         private string ValidMail { get; set; }
         private string Defalut_Mail_Topic { get; set; }
+        private string Host { get; set; }
+        private int Port { get; set; }
+        private bool enableSsl { get; set; }
 
         private MailService()
         {
@@ -32,6 +35,10 @@ namespace File_Monitor
 
             string config_path = "config.xml";
             configParser = new ConfigParser(config_path);
+
+            Host = configParser.Mail_Host;
+            Port = configParser.Mail_Port;
+            enableSsl = configParser.Mail_EnableSsl;
 
             SenderMailAddress = configParser.Mail_Address;
             ACCOUNT = configParser.Mail_Account;
@@ -78,9 +85,9 @@ namespace File_Monitor
             }
             //mail.Bcc.Add(new MailAddress(""));
             //設定SMTP Server 連線資訊
-            smtpclient.Host = "smtp.gmail.com";
-            smtpclient.Port = 25;
-            smtpclient.EnableSsl = true;
+            smtpclient.Host = Host;
+            smtpclient.Port = Port;
+            smtpclient.EnableSsl = enableSsl;
             NetworkCredential MailCredentials = new NetworkCredential(ACCOUNT, PASSWORD); //SMTP Server驗證資訊
             smtpclient.Credentials = MailCredentials;
             smtpclient.Send(mail);

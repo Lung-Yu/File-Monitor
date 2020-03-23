@@ -14,7 +14,9 @@ namespace File_Monitor
         public string Mail_Password { get; set; }
         public string Mail_Address { get; set; }
 
-
+        public string Mail_Host { get; set;}
+        public int Mail_Port { get; set; }
+        public bool Mail_EnableSsl { get; set; }
 
         private List<string> _to = new List<string>();
         private List<string> _cc = new List<string>();
@@ -58,6 +60,20 @@ namespace File_Monitor
 
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
+
+            XmlNodeList mail_server_config = doc.DocumentElement.SelectNodes("/config/mail_server_config");
+            Mail_Host = mail_server_config[0].SelectSingleNode("host").InnerText;
+
+            int _port = 25;
+            if (false == int.TryParse(mail_server_config[0].SelectSingleNode("port").InnerText, out _port))
+                Mail_Port = 25;
+            else Mail_Port = _port;
+
+            Mail_EnableSsl = (mail_server_config[0].SelectSingleNode("enableSsl").InnerText).Equals("0") ? false : true;
+
+            Console.WriteLine("mail host : " + Mail_Host);
+            Console.WriteLine("mail port : " + Mail_Port);
+            Console.WriteLine("mail enable ssl : " + Mail_EnableSsl);
 
             XmlNodeList mail_config = doc.DocumentElement.SelectNodes("/config/mail_server");
             MailTopic = mail_config[0].SelectSingleNode("mail_topic").InnerText;
