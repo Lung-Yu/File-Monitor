@@ -26,10 +26,17 @@ namespace File_Monitor
                 _Service = new MailService();
             return _Service;
         }
-        public static readonly string SenderMailAddress = "";
-        private static readonly string ACCOUNT = "";
-        private static readonly string PASSWORD = "";
-        private static readonly string ValidMail = "";
+
+        private string SenderMailAddress { get; set; }
+        private string ACCOUNT { get; set; }
+        private string PASSWORD { get; set; }
+        private string ValidMail { get; set; }
+        private string Defalut_Mail_Topic { get; set; }
+
+        public void sendNoticeMail(string[] targets, string contents)
+        {
+            this.sendNoticeMail(Defalut_Mail_Topic, targets, null, contents);
+        }
 
         public void sendNoticeMail(string topic, string[] targets, string contents)
         {
