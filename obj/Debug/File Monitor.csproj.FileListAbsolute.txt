@@ -1,1 +1,6 @@
 C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\bin\Debug\File Monitor.exe.config
+C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\obj\Debug\File Monitor.csprojResolveAssemblyReference.cache
+C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\bin\Debug\File Monitor.exe
+C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\bin\Debug\File Monitor.pdb
+C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\obj\Debug\File Monitor.exe
+C:\Users\lungyu\Documents\Visual Studio 2013\Projects\File Monitor\File Monitor\obj\Debug\File Monitor.pdb

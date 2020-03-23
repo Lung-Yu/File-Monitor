@@ -10,7 +10,12 @@ namespace File_Monitor
     {
         static void Main(string[] args)
         {
+            List<string> targets = new List<string>();
 
+            MailService mailService = MailService.getInstance();
+            //mailService.sendNoticeMail(targets.ToArray(), mailContent);
+
+            Console.ReadLine();
         }
     }
 }
