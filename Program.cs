@@ -12,14 +12,16 @@ namespace File_Monitor
     {
         static void Main(string[] args)
         {
-            //MailService mailService = MailService.getInstance();
+            MailService mailService = MailService.getInstance();
             //mailService.sendNoticeMail(targets.ToArray(), mailContent);
-            string path = "check_files/asdasda.txt";
+            //string path = "check_files/asdasda.txt";
 
             //Console.WriteLine("SHA - " + ToSHA(path));
             //Console.WriteLine("MD5 - " + ToMD5(path));
 
+            ConfigParser config = mailService.getConfigParser();
 
+           
 
             #region 目錄遍訪
             string check_folder = "check_files";
