@@ -10,6 +10,10 @@ namespace File_Monitor
 {
     class Program
     {
+        const int GET_FOLDERS = 1000;
+        const int GET_FILES = 100;
+        private static ConfigParser config = null;
+
         static void Main(string[] args)
         {
             MailService mailService = MailService.getInstance();
@@ -19,29 +23,44 @@ namespace File_Monitor
             //Console.WriteLine("SHA - " + ToSHA(path));
             //Console.WriteLine("MD5 - " + ToMD5(path));
 
-            ConfigParser config = mailService.getConfigParser();
+            config = mailService.getConfigParser();
 
-           
 
-            #region 目錄遍訪
-            string check_folder = "check_files";
-
-            DirectoryInfo info = new DirectoryInfo(check_folder);
-            foreach (FileSystemInfo item in info.GetFileSystemInfos())
+            foreach (string check_folder in config.Checks)
             {
-                ListFiles(item);
-            }
-            #endregion
+                #region 目錄遍訪
+                //string check_folder = "check_files";
 
+                DirectoryInfo info = new DirectoryInfo(check_folder);
+                foreach (FileSystemInfo item in info.GetFileSystemInfos())
+                {
+                    ListFiles(item);
+                }
+                #endregion
+            }
 
 
 
             Console.ReadLine();
         }
 
-        const int GET_FOLDERS = 1000;
-        const int GET_FILES = 100;
+        private static bool IsIgnore(string check_full_path)
+        {
+            List<string> full_lists = new List<string>();
+            foreach (string ignore in config.Ignores)
+            {
+                string ignore_full_name = new DirectoryInfo(ignore).FullName;
 
+                //Console.WriteLine(ignore_full_name);
+                //Console.WriteLine(check_full_path);
+
+                if (check_full_path.Equals(ignore_full_name))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public static void ListFiles(FileSystemInfo fileSysInfo)
         {
@@ -49,12 +68,13 @@ namespace File_Monitor
             info.FullName = fileSysInfo.FullName;
             info.FileName = fileSysInfo.Name;
 
-
-            if (System.IO.Directory.Exists(info.FullName))
+            if (IsIgnore(info.FullName))
+                return;
+            else if (System.IO.Directory.Exists(info.FullName))
                 info.IsFolder = true;
             else if (System.IO.File.Exists(info.FullName))
                 info.IsFolder = false;
-            else 
+            else
                 return;
 
 

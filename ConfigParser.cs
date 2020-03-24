@@ -61,6 +61,32 @@ namespace File_Monitor
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
 
+            read_mail_server(doc);
+
+            
+
+            XmlNodeList monitor_check = doc.DocumentElement.SelectNodes("/config/monitor/check");
+            XmlNodeList monitor_ignore = doc.DocumentElement.SelectNodes("/config/monitor/ignore");
+
+            for (int i = 0; i < monitor_check.Count; i++)
+            {
+                string txt_check = monitor_check.Item(i).InnerText;
+                Checks.Add(txt_check);
+                Console.WriteLine("check >> " + txt_check);
+            }
+
+            for (int i = 0; i < monitor_ignore.Count; i++)
+            {
+                string txt_ignore = monitor_ignore.Item(i).InnerText;
+                Ignores.Add(txt_ignore);
+                Console.WriteLine("ignore > " + txt_ignore);
+            }
+
+        }
+
+
+        private void read_mail_server(XmlDocument doc)
+        {
             XmlNodeList mail_server_config = doc.DocumentElement.SelectNodes("/config/mail_server_config");
             Mail_Host = mail_server_config[0].SelectSingleNode("host").InnerText;
 
@@ -80,12 +106,15 @@ namespace File_Monitor
             Mail_Account = mail_config[0].SelectSingleNode("mail_account").InnerText;
             Mail_Password = mail_config[0].SelectSingleNode("mail_password").InnerText;
             Mail_Address = mail_config[0].SelectSingleNode("mail_address").InnerText;
-            
+
             Console.WriteLine("mail topic : " + MailTopic);
             Console.WriteLine("mail account : " + Mail_Account);
             Console.WriteLine("mail password : " + Mail_Password);
             Console.WriteLine("mail address : " + Mail_Address);
+        }
 
+        private void read_tos(XmlDocument doc)
+        {
             XmlNodeList mail_to = doc.DocumentElement.SelectNodes("/config/mail_server/TO");
             XmlNodeList mail_cc = doc.DocumentElement.SelectNodes("/config/mail_server/CC");
             XmlNodeList mail_bcc = doc.DocumentElement.SelectNodes("/config/mail_server/BCC");
@@ -110,25 +139,7 @@ namespace File_Monitor
                 Bcc.Add(txt_bcc);
                 Console.WriteLine("mail bcc >> " + txt_bcc);
             }
-
-            XmlNodeList monitor_check = doc.DocumentElement.SelectNodes("/config/monitor/check");
-            XmlNodeList monitor_ignore = doc.DocumentElement.SelectNodes("/config/monitor/ignore");
-
-            for (int i = 0; i < monitor_check.Count; i++)
-            {
-                string txt_check = monitor_check.Item(i).InnerText;
-                Checks.Add(txt_check);
-                Console.WriteLine("check >> " + txt_check);
-            }
-
-            for (int i = 0; i < monitor_ignore.Count; i++)
-            {
-                string txt_ignore = monitor_ignore.Item(i).InnerText;
-                Ignores.Add(txt_ignore);
-                Console.WriteLine("ignore > " + txt_ignore);
-            }
-
         }
-
     }
+
 }
