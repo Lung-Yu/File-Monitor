@@ -58,6 +58,29 @@ namespace File_Monitor
             dt.Columns.Add("Check", typeof(string), "0");
 
             visitAllFiles();
+
+            foreach (MFileInfo real in listFileInfo)
+            {
+                string sqlWhere = string.Format("{0} = '{1}'",
+                    Recorder.COLUMN_FULL_NAME,
+                    real.FullName);
+                DataRow[] rows = dt.Select(sqlWhere);
+
+                //discover new file
+                if (rows.Length == 0)
+                {
+                    Console.WriteLine("哪個人偷放怪東西!!! \t >>> \t " + real.FileName);
+                }
+
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    Console.WriteLine(string.Format("{0} {1}",
+                        rows[i][Recorder.COLUMN_FULL_NAME],
+                        rows[i][Recorder.COLUMN_UNIQUE_CODE]
+                        ));
+                }
+            }
+
         }
 
         static void RecordAllFile()
@@ -123,7 +146,7 @@ namespace File_Monitor
             else
                 info.UniqueCode = ToSHA(info.FullName);
 
-            info.show();
+            //info.show();
             listFileInfo.Add(info);
         }
 
