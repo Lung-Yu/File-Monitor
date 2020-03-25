@@ -33,6 +33,10 @@ namespace File_Monitor
         public void closeFileResource()
         {
             pFile.Close();
+
+            FileAttributes fileAttributes = File.GetAttributes(LogFilePath);
+            File.SetAttributes(LogFilePath, FileAttributes.Hidden |
+                             FileAttributes.ReadOnly);
         }
 
         public DataTable read()

@@ -14,10 +14,17 @@ namespace File_Monitor
         const int GET_FILES = 100;
         private static ConfigParser config = null;
         private static Recorder recorder = null;
+        private static MailService mailService = null;
+        private const string LOG_RECORD_FILE = "first_log.csv";
 
         static void Main(string[] args)
         {
-            MailService mailService = MailService.getInstance();
+            RecordAllFile();
+        }
+
+        static void RecordAllFile()
+        {
+            mailService = MailService.getInstance();
             //mailService.sendNoticeMail(targets.ToArray(), mailContent);
             //string path = "check_files/asdasda.txt";
 
@@ -25,7 +32,7 @@ namespace File_Monitor
             //Console.WriteLine("MD5 - " + ToMD5(path));
 
             config = mailService.getConfigParser();
-            recorder = new Recorder(".first_log.csv");
+            recorder = new Recorder(LOG_RECORD_FILE);
 
             foreach (string check_folder in config.Checks)
             {
