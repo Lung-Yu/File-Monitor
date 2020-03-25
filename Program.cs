@@ -152,6 +152,12 @@ namespace File_Monitor
             recorder = new Recorder(LOG_RECORD_FILE);
             recorder.openFileResource();
 
+            visitAllFiles();
+
+            foreach (MFileInfo row in listFileInfo)
+            {
+                recorder.record(row);
+            }
 
 
             recorder.closeFileResource();
