@@ -9,6 +9,8 @@ namespace File_Monitor
 {
     public class ConfigParser
     {
+        public const string CONFIG_PATH = "config.xml";
+
         public string MailTopic { get; set; }
         public string Mail_Account { get; set; }
         public string Mail_Password { get; set; }

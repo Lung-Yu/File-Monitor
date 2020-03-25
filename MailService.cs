@@ -18,7 +18,8 @@ namespace File_Monitor
                 _Service = new MailService();
             return _Service;
         }
-     
+
+        
         private ConfigParser configParser = null;
         private string SenderMailAddress { get; set; }
         private string ACCOUNT { get; set; }
@@ -34,8 +35,8 @@ namespace File_Monitor
         {
             // TODO: Add constructor logic here
 
-            string config_path = "config.xml";
-            configParser = new ConfigParser(config_path);
+
+            configParser = new ConfigParser(ConfigParser.CONFIG_PATH);
 
             Host = configParser.Mail_Host;
             Port = configParser.Mail_Port;
