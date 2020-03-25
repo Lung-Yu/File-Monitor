@@ -28,10 +28,6 @@ namespace File_Monitor
 
             CheckAllFile();
 
-            Console.WriteLine("********************");
-
-            visitAllFiles();
-
             Console.ReadLine();
         }
 
@@ -54,16 +50,14 @@ namespace File_Monitor
 
         static void CheckAllFile()
         {
+            //get all record from log
             mailService = MailService.getInstance();
             config = mailService.getConfigParser();
             recorder = new Recorder(LOG_RECORD_FILE);
             DataTable dt = recorder.read();
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                DataRow row = dt.Rows[i];
-                Console.WriteLine("{0}\t{1}", row[Recorder.COLUMN_FULL_NAME],
-                    row[Recorder.COLUMN_UNIQUE_CODE]);
-            }
+            dt.Columns.Add("Check", typeof(string), "0");
+
+            visitAllFiles();
         }
 
         static void RecordAllFile()
@@ -79,7 +73,7 @@ namespace File_Monitor
             recorder = new Recorder(LOG_RECORD_FILE);
             recorder.openFileResource();
 
-            
+
 
             recorder.closeFileResource();
         }
