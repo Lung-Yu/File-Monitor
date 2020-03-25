@@ -29,6 +29,7 @@ namespace File_Monitor
         private int Port { get; set; }
         private bool enableSsl { get; set; }
 
+        
         private MailService()
         {
             // TODO: Add constructor logic here
@@ -47,6 +48,10 @@ namespace File_Monitor
             Defalut_Mail_Topic = configParser.MailTopic;
         }
 
+        public ConfigParser getConfigParser()
+        {
+            return configParser;
+        }
 
         public void sendNoticeMail(string contents)
         {
