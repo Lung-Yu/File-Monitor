@@ -54,16 +54,23 @@ namespace File_Monitor
 
         static void Main(string[] args)
         {
-            //RecordAllFile();
 
-            DataTable dt = CheckAllFile();
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if (!System.IO.File.Exists(LOG_RECORD_FILE))
             {
-                Console.WriteLine(string.Format("{0}\t{1}",
-                    checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
-                    dt.Rows[i][Recorder.COLUMN_FULL_NAME]
-                    ));
+                RecordAllFile();
+                Console.WriteLine("record finish.");
+            }
+            else
+            {
+                DataTable dt = CheckAllFile();
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Console.WriteLine(string.Format("{0}\t{1}",
+                        checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+                        dt.Rows[i][Recorder.COLUMN_FULL_NAME]
+                        ));
+                }
             }
 
             Console.ReadLine();
@@ -210,7 +217,7 @@ namespace File_Monitor
                 info.UniqueCode = getFileUniqueCode(info.FullName);
                 //info.show();
                 listFileInfo.Add(info);
-            }   
+            }
         }
 
         static List<string> getList(string path, int type)
