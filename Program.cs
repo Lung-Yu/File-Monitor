@@ -20,7 +20,7 @@ namespace File_Monitor
 
         private const string LOG_RECORD_FILE = "first_log.csv";
 
-        private const string CHECK_FILE_TAG_MISSING = "0";
+        public const string CHECK_FILE_TAG_MISSING = "0";
         private const string CHECK_FILE_TAG_NORMAL = "1";
         private const string CHECK_FILE_TAG_NEW = "2";
         private const string CHECK_FILE_TAG_MODIFY = "3";
@@ -152,6 +152,12 @@ namespace File_Monitor
             recorder = new Recorder(LOG_RECORD_FILE);
             recorder.openFileResource();
 
+            visitAllFiles();
+
+            foreach (MFileInfo row in listFileInfo)
+            {
+                recorder.record(row);
+            }
 
 
             recorder.closeFileResource();
@@ -193,17 +199,18 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                info.UniqueCode = ToSHA(info.FullName);
+                //info.UniqueCode = getFileUniqueCode(info.FullName);
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
                     ListFiles(item);
             }
             else
-                info.UniqueCode = ToMD5(info.FullName);
-
-            //info.show();
-            listFileInfo.Add(info);
+            {
+                info.UniqueCode = getFileUniqueCode(info.FullName);
+                //info.show();
+                listFileInfo.Add(info);
+            }   
         }
 
         static List<string> getList(string path, int type)
@@ -226,6 +233,18 @@ namespace File_Monitor
             }
 
             return list;
+        }
+
+
+        static string getFileUniqueCode(string file)
+        {
+            string uCode = "";
+
+            FileStream fs = new FileStream(file, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            uCode = ToSHA(sr.ReadToEnd());
+
+            return uCode;
         }
 
         static string ToSHA(string str)

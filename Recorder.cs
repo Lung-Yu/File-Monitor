@@ -68,7 +68,7 @@ namespace File_Monitor
                 DataRow row = dt.NewRow();
                 row[COLUMN_FULL_NAME] = itme[0];
                 row[COLUMN_UNIQUE_CODE] = itme[1];
-
+                row[COLUMN_CHECK] = Program.CHECK_FILE_TAG_MISSING;
                 dt.Rows.Add(row);
             }
 
