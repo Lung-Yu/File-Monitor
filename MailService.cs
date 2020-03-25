@@ -18,7 +18,8 @@ namespace File_Monitor
                 _Service = new MailService();
             return _Service;
         }
-     
+
+        
         private ConfigParser configParser = null;
         private string SenderMailAddress { get; set; }
         private string ACCOUNT { get; set; }
@@ -29,12 +30,13 @@ namespace File_Monitor
         private int Port { get; set; }
         private bool enableSsl { get; set; }
 
+        
         private MailService()
         {
             // TODO: Add constructor logic here
 
-            string config_path = "config.xml";
-            configParser = new ConfigParser(config_path);
+
+            configParser = new ConfigParser(ConfigParser.CONFIG_PATH);
 
             Host = configParser.Mail_Host;
             Port = configParser.Mail_Port;
@@ -47,6 +49,10 @@ namespace File_Monitor
             Defalut_Mail_Topic = configParser.MailTopic;
         }
 
+        public ConfigParser getConfigParser()
+        {
+            return configParser;
+        }
 
         public void sendNoticeMail(string contents)
         {
