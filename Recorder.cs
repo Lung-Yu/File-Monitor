@@ -18,6 +18,7 @@ namespace File_Monitor
 
         public const string COLUMN_FULL_NAME = "FullName";
         public const string COLUMN_UNIQUE_CODE = "UniqueCode";
+        public const string COLUMN_CHECK = "CheckFile";
 
         public Recorder(string csvfilepath)
         {
@@ -48,6 +49,7 @@ namespace File_Monitor
             DataTable dt = new DataTable();
             dt.Columns.Add(COLUMN_FULL_NAME, typeof(string));
             dt.Columns.Add(COLUMN_UNIQUE_CODE, typeof(string));
+            dt.Columns.Add(COLUMN_CHECK, typeof(string));
 
             FileStream fs = new FileStream(LogFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
@@ -75,3 +77,4 @@ namespace File_Monitor
 
     }
 }
+

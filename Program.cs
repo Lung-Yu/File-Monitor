@@ -20,13 +20,51 @@ namespace File_Monitor
 
         private const string LOG_RECORD_FILE = "first_log.csv";
 
+        private const string CHECK_FILE_TAG_MISSING = "0";
+        private const string CHECK_FILE_TAG_NORMAL = "1";
+        private const string CHECK_FILE_TAG_NEW = "2";
+        private const string CHECK_FILE_TAG_MODIFY = "3";
+
+
+        private static string checkFileTagToString(string type)
+        {
+            if (CHECK_FILE_TAG_MISSING.Equals(type))
+            {
+                return "[x]";
+            }
+            else if (CHECK_FILE_TAG_NORMAL.Equals(type))
+            {
+                return "[o]";
+            }
+            else if (CHECK_FILE_TAG_NEW.Equals(type))
+            {
+                return "[+]";
+            }
+            else if (CHECK_FILE_TAG_MODIFY.Equals(type))
+            {
+                return "[#]";
+            }
+            else
+            {
+                return "[e]";
+            }
+
+        }
 
 
         static void Main(string[] args)
         {
             //RecordAllFile();
 
-            CheckAllFile();
+            DataTable dt = CheckAllFile();
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Console.WriteLine(string.Format("{0}\t{1}",
+                    checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+                    dt.Rows[i][Recorder.COLUMN_FULL_NAME]
+                    ));
+            }
 
             Console.ReadLine();
         }
@@ -48,14 +86,13 @@ namespace File_Monitor
             }
         }
 
-        static void CheckAllFile()
+        static DataTable CheckAllFile()
         {
             //get all record from log
             mailService = MailService.getInstance();
             config = mailService.getConfigParser();
             recorder = new Recorder(LOG_RECORD_FILE);
             DataTable dt = recorder.read();
-            dt.Columns.Add("Check", typeof(string), "0");
 
             visitAllFiles();
 
@@ -69,18 +106,37 @@ namespace File_Monitor
                 //discover new file
                 if (rows.Length == 0)
                 {
-                    Console.WriteLine("哪個人偷放怪東西!!! \t >>> \t " + real.FileName);
+                    //Console.WriteLine("哪個人偷放怪東西!!! \t >>> \t " + real.FileName);
+
+                    DataRow newrow = dt.NewRow();
+                    newrow[Recorder.COLUMN_FULL_NAME] = real.FullName;
+                    newrow[Recorder.COLUMN_UNIQUE_CODE] = real.UniqueCode;
+                    newrow[Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_NEW;
+
+                    dt.Rows.Add(newrow);
+
                 }
 
                 for (int i = 0; i < rows.Length; i++)
                 {
-                    Console.WriteLine(string.Format("{0} {1}",
-                        rows[i][Recorder.COLUMN_FULL_NAME],
-                        rows[i][Recorder.COLUMN_UNIQUE_CODE]
-                        ));
+                    //Console.WriteLine(string.Format(i + "_{0} {1}",
+                    //    rows[i][Recorder.COLUMN_FULL_NAME],
+                    //    rows[i][Recorder.COLUMN_UNIQUE_CODE]
+                    //    ));
+
+                    if (rows[i][Recorder.COLUMN_UNIQUE_CODE].Equals(real.UniqueCode))
+                    {
+
+                        rows[i][Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_NORMAL;
+                    }
+                    else
+                    {
+                        rows[i][Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_MODIFY;
+                    }
                 }
             }
 
+            return dt;
         }
 
         static void RecordAllFile()
@@ -144,7 +200,7 @@ namespace File_Monitor
                     ListFiles(item);
             }
             else
-                info.UniqueCode = ToSHA(info.FullName);
+                info.UniqueCode = ToMD5(info.FullName);
 
             //info.show();
             listFileInfo.Add(info);
