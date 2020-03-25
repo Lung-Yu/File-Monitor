@@ -13,6 +13,7 @@ namespace File_Monitor
         const int GET_FOLDERS = 1000;
         const int GET_FILES = 100;
         private static ConfigParser config = null;
+        private static Recorder recorder = null;
 
         static void Main(string[] args)
         {
@@ -24,7 +25,7 @@ namespace File_Monitor
             //Console.WriteLine("MD5 - " + ToMD5(path));
 
             config = mailService.getConfigParser();
-
+            recorder = new Recorder(".first_log.csv");
 
             foreach (string check_folder in config.Checks)
             {
@@ -40,8 +41,9 @@ namespace File_Monitor
             }
 
 
-
             Console.ReadLine();
+
+            recorder.closeFileResource();
         }
 
         private static bool IsIgnore(string check_full_path)
@@ -90,6 +92,8 @@ namespace File_Monitor
                 info.UniqueCode = ToSHA(info.FullName);
 
             info.show();
+            recorder.record(info);
+            
       }
 
         static List<string> getList(string path,int type)
