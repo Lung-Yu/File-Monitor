@@ -54,17 +54,17 @@ namespace File_Monitor
 
         static void Main(string[] args)
         {
-            //RecordAllFile();
+            RecordAllFile();
 
-            DataTable dt = CheckAllFile();
+            //DataTable dt = CheckAllFile();
 
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                Console.WriteLine(string.Format("{0}\t{1}",
-                    checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
-                    dt.Rows[i][Recorder.COLUMN_FULL_NAME]
-                    ));
-            }
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    Console.WriteLine(string.Format("{0}\t{1}_{2}",
+            //        checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+            //        dt.Rows[i][Recorder.COLUMN_FULL_NAME]
+            //        ));
+            //}
 
             Console.ReadLine();
         }
@@ -193,17 +193,18 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                info.UniqueCode = ToSHA(info.FullName);
+                //info.UniqueCode = getFileUniqueCode(info.FullName);
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
                     ListFiles(item);
             }
             else
-                info.UniqueCode = ToMD5(info.FullName);
-
-            //info.show();
-            listFileInfo.Add(info);
+            {
+                info.UniqueCode = getFileUniqueCode(info.FullName);
+                //info.show();
+                listFileInfo.Add(info);
+            }   
         }
 
         static List<string> getList(string path, int type)
@@ -226,6 +227,18 @@ namespace File_Monitor
             }
 
             return list;
+        }
+
+
+        static string getFileUniqueCode(string file)
+        {
+            string uCode = "";
+
+            FileStream fs = new FileStream(file, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            uCode = ToSHA(sr.ReadToEnd());
+
+            return uCode;
         }
 
         static string ToSHA(string str)
