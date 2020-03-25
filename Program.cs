@@ -64,13 +64,21 @@ namespace File_Monitor
             {
                 DataTable dt = CheckAllFile();
 
+                StringBuilder sb = new StringBuilder();
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    Console.WriteLine(string.Format("{0}\t{1}",
+
+                    sb.Append(string.Format("{0}\t{1}",
                         checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
                         dt.Rows[i][Recorder.COLUMN_FULL_NAME]
                         ));
+                    sb.Append("\n");
                 }
+
+                Console.WriteLine(sb);
+
+                mailService.sendNoticeMail(sb.ToString());
             }
 
             Console.ReadLine();
