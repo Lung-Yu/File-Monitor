@@ -16,6 +16,8 @@ namespace File_Monitor
         private static ConfigParser config = null;
         private static Recorder recorder = null;
         private static MailService mailService = null;
+        private static List<MFileInfo> listFileInfo;
+
         private const string LOG_RECORD_FILE = "first_log.csv";
 
 
@@ -23,12 +25,32 @@ namespace File_Monitor
         static void Main(string[] args)
         {
             //RecordAllFile();
+
             CheckAllFile();
+
+            Console.WriteLine("********************");
+
+            visitAllFiles();
 
             Console.ReadLine();
         }
 
+        static void visitAllFiles()
+        {
+            listFileInfo = new List<MFileInfo>();
+            foreach (string check_folder in config.Checks)
+            {
+                #region 目錄遍訪
+                //string check_folder = "check_files";
 
+                DirectoryInfo info = new DirectoryInfo(check_folder);
+                foreach (FileSystemInfo item in info.GetFileSystemInfos())
+                {
+                    ListFiles(item);
+                }
+                #endregion
+            }
+        }
 
         static void CheckAllFile()
         {
@@ -57,18 +79,7 @@ namespace File_Monitor
             recorder = new Recorder(LOG_RECORD_FILE);
             recorder.openFileResource();
 
-            foreach (string check_folder in config.Checks)
-            {
-                #region 目錄遍訪
-                //string check_folder = "check_files";
-
-                DirectoryInfo info = new DirectoryInfo(check_folder);
-                foreach (FileSystemInfo item in info.GetFileSystemInfos())
-                {
-                    ListFiles(item);
-                }
-                #endregion
-            }
+            
 
             recorder.closeFileResource();
         }
@@ -119,8 +130,7 @@ namespace File_Monitor
                 info.UniqueCode = ToSHA(info.FullName);
 
             info.show();
-            recorder.record(info);
-
+            listFileInfo.Add(info);
         }
 
         static List<string> getList(string path, int type)
