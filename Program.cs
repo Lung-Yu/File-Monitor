@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -17,9 +18,30 @@ namespace File_Monitor
         private static MailService mailService = null;
         private const string LOG_RECORD_FILE = "first_log.csv";
 
+
+
         static void Main(string[] args)
         {
-            RecordAllFile();
+            //RecordAllFile();
+            CheckAllFile();
+
+            Console.ReadLine();
+        }
+
+
+
+        static void CheckAllFile()
+        {
+            mailService = MailService.getInstance();
+            config = mailService.getConfigParser();
+            recorder = new Recorder(LOG_RECORD_FILE);
+            DataTable dt = recorder.read();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                DataRow row = dt.Rows[i];
+                Console.WriteLine("{0}\t{1}", row[Recorder.COLUMN_FULL_NAME],
+                    row[Recorder.COLUMN_UNIQUE_CODE]);
+            }
         }
 
         static void RecordAllFile()
@@ -33,6 +55,7 @@ namespace File_Monitor
 
             config = mailService.getConfigParser();
             recorder = new Recorder(LOG_RECORD_FILE);
+            recorder.openFileResource();
 
             foreach (string check_folder in config.Checks)
             {
@@ -46,9 +69,6 @@ namespace File_Monitor
                 }
                 #endregion
             }
-
-
-            Console.ReadLine();
 
             recorder.closeFileResource();
         }
@@ -100,14 +120,14 @@ namespace File_Monitor
 
             info.show();
             recorder.record(info);
-            
-      }
 
-        static List<string> getList(string path,int type)
+        }
+
+        static List<string> getList(string path, int type)
         {
             List<string> list = new List<string>();
             DirectoryInfo dir = new DirectoryInfo(path);
-            
+
             switch (type)
             {
                 case GET_FOLDERS:
