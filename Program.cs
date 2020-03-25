@@ -20,7 +20,7 @@ namespace File_Monitor
 
         private const string LOG_RECORD_FILE = "first_log.csv";
 
-        private const string CHECK_FILE_TAG_MISSING = "0";
+        public const string CHECK_FILE_TAG_MISSING = "0";
         private const string CHECK_FILE_TAG_NORMAL = "1";
         private const string CHECK_FILE_TAG_NEW = "2";
         private const string CHECK_FILE_TAG_MODIFY = "3";
@@ -54,17 +54,17 @@ namespace File_Monitor
 
         static void Main(string[] args)
         {
-            RecordAllFile();
+            //RecordAllFile();
 
-            //DataTable dt = CheckAllFile();
+            DataTable dt = CheckAllFile();
 
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    Console.WriteLine(string.Format("{0}\t{1}_{2}",
-            //        checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
-            //        dt.Rows[i][Recorder.COLUMN_FULL_NAME]
-            //        ));
-            //}
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Console.WriteLine(string.Format("{0}\t{1}",
+                    checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+                    dt.Rows[i][Recorder.COLUMN_FULL_NAME]
+                    ));
+            }
 
             Console.ReadLine();
         }
