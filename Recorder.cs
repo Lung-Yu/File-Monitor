@@ -14,10 +14,15 @@ namespace File_Monitor
         private string LogFilePath = null;
         private const int COLUMNS_COUNT = 2;
         private StreamWriter pFile = null;
+
+
+        public const string COLUMN_FULL_NAME = "FullName";
+        public const string COLUMN_UNIQUE_CODE = "UniqueCode";
+        public const string COLUMN_CHECK = "CheckFile";
+
         public Recorder(string csvfilepath)
         {
             LogFilePath = csvfilepath;
-            openFileResource();
         }
 
         public void record(MFileInfo data)
@@ -42,8 +47,9 @@ namespace File_Monitor
         public DataTable read()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("FullName", typeof(string));
-            dt.Columns.Add("UniqueCode", typeof(string));
+            dt.Columns.Add(COLUMN_FULL_NAME, typeof(string));
+            dt.Columns.Add(COLUMN_UNIQUE_CODE, typeof(string));
+            dt.Columns.Add(COLUMN_CHECK, typeof(string));
 
             FileStream fs = new FileStream(LogFilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
             StreamReader sr = new StreamReader(fs, Encoding.UTF8);
@@ -60,9 +66,9 @@ namespace File_Monitor
                     continue;
 
                 DataRow row = dt.NewRow();
-                row["UniqueCode"] = itme[0];
-                row["FullName"] = itme[1];
-
+                row[COLUMN_FULL_NAME] = itme[0];
+                row[COLUMN_UNIQUE_CODE] = itme[1];
+                row[COLUMN_CHECK] = Program.CHECK_FILE_TAG_MISSING;
                 dt.Rows.Add(row);
             }
 
@@ -71,3 +77,4 @@ namespace File_Monitor
 
     }
 }
+

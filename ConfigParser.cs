@@ -72,14 +72,14 @@ namespace File_Monitor
             {
                 string txt_check = monitor_check.Item(i).InnerText;
                 Checks.Add(txt_check);
-                Console.WriteLine("check >> " + txt_check);
+                console_write("check >> " + txt_check);
             }
 
             for (int i = 0; i < monitor_ignore.Count; i++)
             {
                 string txt_ignore = monitor_ignore.Item(i).InnerText;
                 Ignores.Add(txt_ignore);
-                Console.WriteLine("ignore > " + txt_ignore);
+                console_write("ignore > " + txt_ignore);
             }
 
         }
@@ -97,9 +97,9 @@ namespace File_Monitor
 
             Mail_EnableSsl = (mail_server_config[0].SelectSingleNode("enableSsl").InnerText).Equals("0") ? false : true;
 
-            Console.WriteLine("mail host : " + Mail_Host);
-            Console.WriteLine("mail port : " + Mail_Port);
-            Console.WriteLine("mail enable ssl : " + Mail_EnableSsl);
+            console_write("mail host : " + Mail_Host);
+            console_write("mail port : " + Mail_Port);
+            console_write("mail enable ssl : " + Mail_EnableSsl);
 
             XmlNodeList mail_config = doc.DocumentElement.SelectNodes("/config/mail_server");
             MailTopic = mail_config[0].SelectSingleNode("mail_topic").InnerText;
@@ -107,10 +107,10 @@ namespace File_Monitor
             Mail_Password = mail_config[0].SelectSingleNode("mail_password").InnerText;
             Mail_Address = mail_config[0].SelectSingleNode("mail_address").InnerText;
 
-            Console.WriteLine("mail topic : " + MailTopic);
-            Console.WriteLine("mail account : " + Mail_Account);
-            Console.WriteLine("mail password : " + Mail_Password);
-            Console.WriteLine("mail address : " + Mail_Address);
+            console_write("mail topic : " + MailTopic);
+            console_write("mail account : " + Mail_Account);
+            console_write("mail password : " + Mail_Password);
+            console_write("mail address : " + Mail_Address);
         }
 
         private void read_tos(XmlDocument doc)
@@ -123,22 +123,27 @@ namespace File_Monitor
             {
                 string txt_to = mail_to.Item(i).InnerText;
                 To.Add(txt_to);
-                Console.WriteLine("mail to >> " + txt_to);
+                console_write("mail to >> " + txt_to);
             }
 
             for (int i = 0; i < mail_cc.Count; i++)
             {
                 string txt_cc = mail_cc.Item(i).InnerText;
                 Cc.Add(txt_cc);
-                Console.WriteLine("mail cc >> " + txt_cc);
+                console_write("mail cc >> " + txt_cc);
             }
 
             for (int i = 0; i < mail_bcc.Count; i++)
             {
                 string txt_bcc = mail_bcc.Item(i).InnerText;
                 Bcc.Add(txt_bcc);
-                Console.WriteLine("mail bcc >> " + txt_bcc);
+                console_write("mail bcc >> " + txt_bcc);
             }
+        }
+
+        private void console_write(string msg)
+        {
+            //Console.WriteLine(msg);
         }
     }
 

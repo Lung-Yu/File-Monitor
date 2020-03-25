@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -15,11 +16,127 @@ namespace File_Monitor
         private static ConfigParser config = null;
         private static Recorder recorder = null;
         private static MailService mailService = null;
+        private static List<MFileInfo> listFileInfo;
+
         private const string LOG_RECORD_FILE = "first_log.csv";
+
+        public const string CHECK_FILE_TAG_MISSING = "0";
+        private const string CHECK_FILE_TAG_NORMAL = "1";
+        private const string CHECK_FILE_TAG_NEW = "2";
+        private const string CHECK_FILE_TAG_MODIFY = "3";
+
+
+        private static string checkFileTagToString(string type)
+        {
+            if (CHECK_FILE_TAG_MISSING.Equals(type))
+            {
+                return "[x]";
+            }
+            else if (CHECK_FILE_TAG_NORMAL.Equals(type))
+            {
+                return "[o]";
+            }
+            else if (CHECK_FILE_TAG_NEW.Equals(type))
+            {
+                return "[+]";
+            }
+            else if (CHECK_FILE_TAG_MODIFY.Equals(type))
+            {
+                return "[#]";
+            }
+            else
+            {
+                return "[e]";
+            }
+
+        }
+
 
         static void Main(string[] args)
         {
-            RecordAllFile();
+            //RecordAllFile();
+
+            DataTable dt = CheckAllFile();
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                Console.WriteLine(string.Format("{0}\t{1}",
+                    checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+                    dt.Rows[i][Recorder.COLUMN_FULL_NAME]
+                    ));
+            }
+
+            Console.ReadLine();
+        }
+
+        static void visitAllFiles()
+        {
+            listFileInfo = new List<MFileInfo>();
+            foreach (string check_folder in config.Checks)
+            {
+                #region 目錄遍訪
+                //string check_folder = "check_files";
+
+                DirectoryInfo info = new DirectoryInfo(check_folder);
+                foreach (FileSystemInfo item in info.GetFileSystemInfos())
+                {
+                    ListFiles(item);
+                }
+                #endregion
+            }
+        }
+
+        static DataTable CheckAllFile()
+        {
+            //get all record from log
+            mailService = MailService.getInstance();
+            config = mailService.getConfigParser();
+            recorder = new Recorder(LOG_RECORD_FILE);
+            DataTable dt = recorder.read();
+
+            visitAllFiles();
+
+            foreach (MFileInfo real in listFileInfo)
+            {
+                string sqlWhere = string.Format("{0} = '{1}'",
+                    Recorder.COLUMN_FULL_NAME,
+                    real.FullName);
+                DataRow[] rows = dt.Select(sqlWhere);
+
+                //discover new file
+                if (rows.Length == 0)
+                {
+                    //Console.WriteLine("哪個人偷放怪東西!!! \t >>> \t " + real.FileName);
+
+                    DataRow newrow = dt.NewRow();
+                    newrow[Recorder.COLUMN_FULL_NAME] = real.FullName;
+                    newrow[Recorder.COLUMN_UNIQUE_CODE] = real.UniqueCode;
+                    newrow[Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_NEW;
+
+                    dt.Rows.Add(newrow);
+
+                }
+
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    //Console.WriteLine(string.Format(i + "_{0} {1}",
+                    //    rows[i][Recorder.COLUMN_FULL_NAME],
+                    //    rows[i][Recorder.COLUMN_UNIQUE_CODE]
+                    //    ));
+
+                    if (rows[i][Recorder.COLUMN_UNIQUE_CODE].Equals(real.UniqueCode))
+                    {
+
+                        rows[i][Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_NORMAL;
+                    }
+                    else
+                    {
+                        rows[i][Recorder.COLUMN_CHECK] = CHECK_FILE_TAG_MODIFY;
+                    }
+                }
+            }
+
+            return dt;
         }
 
         static void RecordAllFile()
@@ -33,22 +150,15 @@ namespace File_Monitor
 
             config = mailService.getConfigParser();
             recorder = new Recorder(LOG_RECORD_FILE);
+            recorder.openFileResource();
 
-            foreach (string check_folder in config.Checks)
+            visitAllFiles();
+
+            foreach (MFileInfo row in listFileInfo)
             {
-                #region 目錄遍訪
-                //string check_folder = "check_files";
-
-                DirectoryInfo info = new DirectoryInfo(check_folder);
-                foreach (FileSystemInfo item in info.GetFileSystemInfos())
-                {
-                    ListFiles(item);
-                }
-                #endregion
+                recorder.record(row);
             }
 
-
-            Console.ReadLine();
 
             recorder.closeFileResource();
         }
@@ -89,25 +199,25 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                info.UniqueCode = ToSHA(info.FullName);
+                //info.UniqueCode = getFileUniqueCode(info.FullName);
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
                     ListFiles(item);
             }
             else
-                info.UniqueCode = ToSHA(info.FullName);
+            {
+                info.UniqueCode = getFileUniqueCode(info.FullName);
+                //info.show();
+                listFileInfo.Add(info);
+            }   
+        }
 
-            info.show();
-            recorder.record(info);
-            
-      }
-
-        static List<string> getList(string path,int type)
+        static List<string> getList(string path, int type)
         {
             List<string> list = new List<string>();
             DirectoryInfo dir = new DirectoryInfo(path);
-            
+
             switch (type)
             {
                 case GET_FOLDERS:
@@ -123,6 +233,18 @@ namespace File_Monitor
             }
 
             return list;
+        }
+
+
+        static string getFileUniqueCode(string file)
+        {
+            string uCode = "";
+
+            FileStream fs = new FileStream(file, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            uCode = ToSHA(sr.ReadToEnd());
+
+            return uCode;
         }
 
         static string ToSHA(string str)
