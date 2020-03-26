@@ -30,19 +30,19 @@ namespace File_Monitor
         {
             if (CHECK_FILE_TAG_MISSING.Equals(type))
             {
-                return "[x]";
+                return config.SymboleDelete;
             }
             else if (CHECK_FILE_TAG_NORMAL.Equals(type))
             {
-                return "[o]";
+                return config.SymboleNormal;
             }
             else if (CHECK_FILE_TAG_NEW.Equals(type))
             {
-                return "[+]";
+                return config.SymboleAdd;
             }
             else if (CHECK_FILE_TAG_MODIFY.Equals(type))
             {
-                return "[#]";
+                return config.SymboleChange;
             }
             else
             {
@@ -79,9 +79,10 @@ namespace File_Monitor
                 Console.WriteLine(sb);
 
                 mailService.sendNoticeMail(sb.ToString());
+                Console.WriteLine("finish.");
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         static void visitAllFiles()
