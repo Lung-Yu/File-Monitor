@@ -74,7 +74,7 @@ namespace File_Monitor
             mail.BodyEncoding = System.Text.Encoding.UTF8;
 
             //本文
-            mail.To.Add(new MailAddress(ValidMail));
+            //mail.To.Add(new MailAddress(ValidMail));
             for (int i = 0; i < targets.Length; i++)
             {
                 if (!string.IsNullOrEmpty(targets[i]))
