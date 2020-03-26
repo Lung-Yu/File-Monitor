@@ -15,6 +15,7 @@
         <mail_password>PASSWORD</mail_password>
         <mail_address>SenderMailAddress</mail_address>
 
+<<<<<<< HEAD
         <TO>to_1@gmail.com</TO>
         <TO>to_n@gmail.com</TO>
 
@@ -65,3 +66,14 @@
 
 
 若是要重新產生檔案索引，請直接刪除 first_log.csv 後重新執行 File Monitor.exe 即可.
+=======
+        <TO>to@gmail.com</TO>
+        <CC>cc@gmail.com</CC>
+        <BCC>bcc@gmail.com</BCC>
+    </mail_server>
+    <monitor>
+        <check>checkFolder</check>
+        <ignore>ignoreFolder</ignore>
+        <ignore>ignoreFile</ignore>
+    </monitor>
+>>>>>>> 934e1357001a52cb371a19e4e942220b19ee753a
