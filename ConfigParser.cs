@@ -67,10 +67,9 @@ namespace File_Monitor
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
             read_mail_server(doc);
+            read_tos(doc);
             monitor(doc);
             symbole(doc);
-            
-
         }
 
         private void symbole(XmlDocument doc)
