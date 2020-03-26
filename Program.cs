@@ -66,11 +66,17 @@ namespace File_Monitor
 
                 StringBuilder sb = new StringBuilder();
 
+                bool IsJustNormal = true;
+
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
+                    //如果檢查標籤不是正常
+                    string check_tag = dt.Rows[i][Recorder.COLUMN_CHECK].ToString();
+                    if (!CHECK_FILE_TAG_NORMAL.Equals(check_tag))
+                        IsJustNormal = false;
 
                     sb.Append(string.Format("{0}\t{1}",
-                        checkFileTagToString(dt.Rows[i][Recorder.COLUMN_CHECK].ToString()),
+                        checkFileTagToString(check_tag),
                         dt.Rows[i][Recorder.COLUMN_FULL_NAME]
                         ));
                     sb.Append("\n");
@@ -78,7 +84,9 @@ namespace File_Monitor
 
                 Console.WriteLine(sb);
 
-                mailService.sendNoticeMail(sb.ToString());
+                //如果有任何一筆資料異動則送信
+                if (!IsJustNormal)  
+                    mailService.sendNoticeMail(sb.ToString());
                 Console.WriteLine("finish.");
             }
 
