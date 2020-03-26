@@ -15,7 +15,6 @@
         <mail_password>PASSWORD</mail_password>
         <mail_address>SenderMailAddress</mail_address>
 
-<<<<<<< HEAD
         <TO>to_1@gmail.com</TO>
         <TO>to_n@gmail.com</TO>
 
@@ -62,18 +61,6 @@
 
 程式(File Monitor.exe)執行時會讀取 config.xml 的設定建立所有要檢查的檔案索引，建立完成後會產生 first_log.csv (隱藏檔案).
 
-之後每次執行都會檢查目錄夾所有檔案與 first_log.csv 的紀錄的差異，寄送信件給目標網址.0
-
+之後每次執行都會檢查目錄夾所有檔案與 first_log.csv 的紀錄的差異，寄送信件給目標網址.
 
 若是要重新產生檔案索引，請直接刪除 first_log.csv 後重新執行 File Monitor.exe 即可.
-=======
-        <TO>to@gmail.com</TO>
-        <CC>cc@gmail.com</CC>
-        <BCC>bcc@gmail.com</BCC>
-    </mail_server>
-    <monitor>
-        <check>checkFolder</check>
-        <ignore>ignoreFolder</ignore>
-        <ignore>ignoreFile</ignore>
-    </monitor>
->>>>>>> 934e1357001a52cb371a19e4e942220b19ee753a
