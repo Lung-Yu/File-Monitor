@@ -85,7 +85,8 @@ namespace File_Monitor
             {
                 for (int i = 0; i < cc.Length; i++)
                 {
-                    mail.CC.Add(new MailAddress(cc[i]));
+                    if (!string.IsNullOrEmpty(targets[i]))
+                        mail.CC.Add(new MailAddress(cc[i]));
                 }
 
             }
