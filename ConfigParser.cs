@@ -64,7 +64,7 @@ namespace File_Monitor
             doc.Load(path);
 
             read_mail_server(doc);
-
+            read_tos(doc);
             
 
             XmlNodeList monitor_check = doc.DocumentElement.SelectNodes("/config/monitor/check");
