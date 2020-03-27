@@ -12,6 +12,7 @@ namespace File_Monitor
         public string FullName {get; set;}
         public string UniqueCode { get; set; }
         public bool IsFolder { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         public void show()
         {

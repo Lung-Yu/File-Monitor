@@ -25,6 +25,8 @@ namespace File_Monitor
         public string SymboleDelete { get; set; }
         public string SymboleNormal { get; set; }
 
+        public bool SettingIsShowAll { get; set; }
+
         private List<string> _to = new List<string>();
         private List<string> _cc = new List<string>();
         private List<string> _bcc = new List<string>();
@@ -70,6 +72,13 @@ namespace File_Monitor
             read_tos(doc);
             monitor(doc);
             symbole(doc);
+
+        }
+
+        private void setting(XmlDocument doc)
+        {
+            XmlNodeList symbole = doc.DocumentElement.SelectNodes("/config/setting");
+            SettingIsShowAll = (symbole[0].SelectSingleNode("is_show_all").InnerText.Equals("0"))? false : true;
         }
 
         private void symbole(XmlDocument doc)

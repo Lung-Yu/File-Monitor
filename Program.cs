@@ -75,6 +75,10 @@ namespace File_Monitor
                     if (!CHECK_FILE_TAG_NORMAL.Equals(check_tag))
                         IsJustNormal = false;
 
+
+                    if ((!config.SettingIsShowAll) && CHECK_FILE_TAG_NORMAL.Equals(check_tag))
+                        continue;
+
                     sb.Append(string.Format("{0}\t{1}",
                         checkFileTagToString(check_tag),
                         dt.Rows[i][Recorder.COLUMN_FULL_NAME]
@@ -90,7 +94,7 @@ namespace File_Monitor
                 Console.WriteLine("finish.");
             }
 
-            //Console.ReadLine();
+            Console.ReadLine();
         }
 
         static void visitAllFiles()
@@ -223,7 +227,11 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                //info.UniqueCode = getFileUniqueCode(info.FullName);
+                #region 偵測資料夾
+                //info.UniqueCode = getFileUniqueCode(info.FullName + fileSysInfo.CreationTime);
+                //info.LastUpdateTime = fileSysInfo.LastWriteTime;
+                //listFileInfo.Add(info);
+                #endregion 
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
@@ -231,6 +239,8 @@ namespace File_Monitor
             }
             else
             {
+                //Console.WriteLine(info.FullName + "\t" + fileSysInfo);  
+                info.LastUpdateTime = fileSysInfo.LastWriteTime;
                 info.UniqueCode = getFileUniqueCode(info.FullName);
                 //info.show();
                 listFileInfo.Add(info);

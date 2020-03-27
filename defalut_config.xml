@@ -5,6 +5,9 @@
         <port>25</port>
         <enableSsl>1</enableSsl>
     </mail_server_config>
+    <setting>
+        <is_show_all>0</is_show_all>
+    </setting>
     <symbole>
         <add>[Add]</add>
         <change>[Change]</change>
