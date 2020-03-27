@@ -85,12 +85,12 @@ namespace File_Monitor
                 Console.WriteLine(sb);
 
                 //如果有任何一筆資料異動則送信
-                if (!IsJustNormal)  
-                    mailService.sendNoticeMail(sb.ToString());
+                //if (!IsJustNormal)  
+                //    mailService.sendNoticeMail(sb.ToString());
                 Console.WriteLine("finish.");
             }
 
-            //Console.ReadLine();
+            Console.ReadLine();
         }
 
         static void visitAllFiles()
@@ -223,7 +223,9 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                //info.UniqueCode = getFileUniqueCode(info.FullName);
+                info.UniqueCode = getFileUniqueCode(info.FullName + fileSysInfo.CreationTime);
+                info.LastUpdateTime = fileSysInfo.LastWriteTime;
+                listFileInfo.Add(info);
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
@@ -231,6 +233,8 @@ namespace File_Monitor
             }
             else
             {
+                //Console.WriteLine(info.FullName + "\t" + fileSysInfo);  
+                info.LastUpdateTime = fileSysInfo.LastWriteTime;
                 info.UniqueCode = getFileUniqueCode(info.FullName);
                 //info.show();
                 listFileInfo.Add(info);
