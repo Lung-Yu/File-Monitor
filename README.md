@@ -60,7 +60,7 @@
     * delete : 檔案被刪除
     * normal : 檔案沒有任何改變
 
-* setting>
+* setting
     * is_show_all : 顯示資訊時是否包含normal
         * 1 : 包含
         * 0 : 不包含
