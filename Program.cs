@@ -67,7 +67,6 @@ namespace File_Monitor
                 StringBuilder sb = new StringBuilder();
 
                 bool IsJustNormal = true;
-                bool IsIgnoreNormal = false;
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -77,9 +76,8 @@ namespace File_Monitor
                         IsJustNormal = false;
 
 
-                    if (IsIgnoreNormal && CHECK_FILE_TAG_NORMAL.Equals(check_tag))
+                    if ((!config.SettingIsShowAll) && CHECK_FILE_TAG_NORMAL.Equals(check_tag))
                         continue;
-
 
                     sb.Append(string.Format("{0}\t{1}",
                         checkFileTagToString(check_tag),
@@ -91,8 +89,8 @@ namespace File_Monitor
                 Console.WriteLine(sb);
 
                 //如果有任何一筆資料異動則送信
-                //if (!IsJustNormal)  
-                //    mailService.sendNoticeMail(sb.ToString());
+                if (!IsJustNormal)  
+                    mailService.sendNoticeMail(sb.ToString());
                 Console.WriteLine("finish.");
             }
 
