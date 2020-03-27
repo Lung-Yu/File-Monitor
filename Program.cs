@@ -94,7 +94,7 @@ namespace File_Monitor
                 Console.WriteLine("finish.");
             }
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         static void visitAllFiles()
