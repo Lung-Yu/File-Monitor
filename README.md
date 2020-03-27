@@ -4,36 +4,37 @@
 
 <b>defalut_config.xml</b>
 
-    <mail_server_config>
+    <config>
+        <mail_server_config>
             <host>smtp.gmail.com</host>
             <port>25</port>
             <enableSsl>1</enableSsl>
-    </mail_server_config>
-    <mail_server>
-        <mail_topic>信件主旨</mail_topic>
-        <mail_account>ACCOUNT</mail_account>
-        <mail_password>PASSWORD</mail_password>
-        <mail_address>SenderMailAddress</mail_address>
+        </mail_server_config>
+        <setting>
+            <is_show_all>0</is_show_all>
+        </setting>
+        <symbole>
+            <add>[Add]</add>
+            <change>[Change]</change>
+            <delete>[Delete]</delete>
+            <normal>[Normal]</normal>
+        </symbole>
+        <mail_server>
+            <mail_topic>信件主旨</mail_topic>
+            <mail_account>ACCOUNT</mail_account>
+            <mail_password>PASSWORD</mail_password>
+            <mail_address>SenderMailAddress</mail_address>
 
-        <TO>to_1@gmail.com</TO>
-        <TO>to_n@gmail.com</TO>
-
-        <CC>cc_1@gmail.com</CC>
-        <CC>cc_n@gmail.com</CC>
-
-        <BCC>bcc_1@gmail.com</BCC>
-        <BCC>bcc_n@gmail.com</BCC>
-        
-    </mail_server>
-    <monitor>
-        <check>checkFolder</check>
-        <check>checkFolder 1</check>
-        <check>checkFolder 2</check>
-        
-        <ignore>ignoreFolder 1</ignore>
-        <ignore>ignoreFile 2 </ignore>
-        <ignore>ignoreFile n </ignore>
-    </monitor>
+            <TO>jmoriarty3533@gmail.com</TO>
+            <CC>workfile975@gmail.com</CC>
+            <BCC></BCC>
+        </mail_server>
+        <monitor>
+            <check>check_files</check>
+            <ignore>check_files\gaag</ignore>
+            <ignore>check_files\haha</ignore>
+        </monitor>
+    </config>
 
 * mail_server_config 
     * host : mail 服務的主機
@@ -52,6 +53,17 @@
 * monitor
     * check : 要檢查的 <b>目錄夾/檔案</b>
     * ignore : 略過不檢查的 <b>目錄夾/檔案</b>
+
+* symbole : 檢查結果符號設定
+    * add : 有新檔案
+    * change : 檔案被更動
+    * delete : 檔案被刪除
+    * normal : 檔案沒有任何改變
+
+* setting>
+    * is_show_all : 顯示資訊時是否包含normal
+        * 1 : 包含
+        * 0 : 不包含
 
 ## 執行程式
 
