@@ -67,6 +67,7 @@ namespace File_Monitor
                 StringBuilder sb = new StringBuilder();
 
                 bool IsJustNormal = true;
+                bool IsIgnoreNormal = false;
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
@@ -74,6 +75,11 @@ namespace File_Monitor
                     string check_tag = dt.Rows[i][Recorder.COLUMN_CHECK].ToString();
                     if (!CHECK_FILE_TAG_NORMAL.Equals(check_tag))
                         IsJustNormal = false;
+
+
+                    if (IsIgnoreNormal && CHECK_FILE_TAG_NORMAL.Equals(check_tag))
+                        continue;
+
 
                     sb.Append(string.Format("{0}\t{1}",
                         checkFileTagToString(check_tag),
@@ -223,9 +229,11 @@ namespace File_Monitor
 
             if (info.IsFolder)
             {
-                info.UniqueCode = getFileUniqueCode(info.FullName + fileSysInfo.CreationTime);
-                info.LastUpdateTime = fileSysInfo.LastWriteTime;
-                listFileInfo.Add(info);
+                #region 偵測資料夾
+                //info.UniqueCode = getFileUniqueCode(info.FullName + fileSysInfo.CreationTime);
+                //info.LastUpdateTime = fileSysInfo.LastWriteTime;
+                //listFileInfo.Add(info);
+                #endregion 
 
                 DirectoryInfo dirInfo = new DirectoryInfo(info.FullName);
                 foreach (FileSystemInfo item in dirInfo.GetFileSystemInfos())
