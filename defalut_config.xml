@@ -5,19 +5,28 @@
         <port>25</port>
         <enableSsl>1</enableSsl>
     </mail_server_config>
-     <mail_server>
+    <setting>
+        <is_show_all>0</is_show_all>
+    </setting>
+    <symbole>
+        <add>[Add]</add>
+        <change>[Change]</change>
+        <delete>[Delete]</delete>
+        <normal>[Normal]</normal>
+    </symbole>
+    <mail_server>
         <mail_topic>信件主旨</mail_topic>
         <mail_account>ACCOUNT</mail_account>
         <mail_password>PASSWORD</mail_password>
         <mail_address>SenderMailAddress</mail_address>
 
-        <TO>to@gmail.com</TO>
-        <CC>cc@gmail.com</CC>
-        <BCC>bcc@gmail.com</BCC>
+        <TO>jmoriarty3533@gmail.com</TO>
+        <CC>workfile975@gmail.com</CC>
+        <BCC></BCC>
     </mail_server>
      <monitor>
-         <check>checkFolder</check>
-         <ignore>ignoreFolder</ignore>
-         <ignore>ignoreFile</ignore>
+         <check>check_files</check>
+         <ignore>check_files\gaag</ignore>
+         <ignore>check_files\haha</ignore>
     </monitor>
 </config>

@@ -20,6 +20,13 @@ namespace File_Monitor
         public int Mail_Port { get; set; }
         public bool Mail_EnableSsl { get; set; }
 
+        public string SymboleAdd { get; set; }
+        public string SymboleChange { get; set; }
+        public string SymboleDelete { get; set; }
+        public string SymboleNormal { get; set; }
+
+        public bool SettingIsShowAll { get; set; }
+
         private List<string> _to = new List<string>();
         private List<string> _cc = new List<string>();
         private List<string> _bcc = new List<string>();
@@ -59,14 +66,32 @@ namespace File_Monitor
 
         public ConfigParser(string path)
         {
-
             XmlDocument doc = new XmlDocument();
             doc.Load(path);
-
             read_mail_server(doc);
             read_tos(doc);
-            
+            monitor(doc);
+            symbole(doc);
 
+        }
+
+        private void setting(XmlDocument doc)
+        {
+            XmlNodeList symbole = doc.DocumentElement.SelectNodes("/config/setting");
+            SettingIsShowAll = (symbole[0].SelectSingleNode("is_show_all").InnerText.Equals("0"))? false : true;
+        }
+
+        private void symbole(XmlDocument doc)
+        {
+            XmlNodeList symbole = doc.DocumentElement.SelectNodes("/config/symbole");
+            SymboleAdd = symbole[0].SelectSingleNode("add").InnerText;
+            SymboleChange = symbole[0].SelectSingleNode("change").InnerText;
+            SymboleDelete = symbole[0].SelectSingleNode("delete").InnerText;
+            SymboleNormal = symbole[0].SelectSingleNode("normal").InnerText;
+        }
+
+        private void monitor(XmlDocument doc)
+        {
             XmlNodeList monitor_check = doc.DocumentElement.SelectNodes("/config/monitor/check");
             XmlNodeList monitor_ignore = doc.DocumentElement.SelectNodes("/config/monitor/ignore");
 
@@ -83,7 +108,6 @@ namespace File_Monitor
                 Ignores.Add(txt_ignore);
                 console_write("ignore > " + txt_ignore);
             }
-
         }
 
 
