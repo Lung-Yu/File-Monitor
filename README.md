@@ -1,6 +1,6 @@
 # File Monitor
 
-相關資訊定義在 defalut_config.xml 之中，請複製一份病重新命名為config.xml 放到執行程式的(.exe) 同層目錄夾，程式執行時即會讀取設定檔的內容進行運作。
+相關資訊定義在 defalut_config.xml 之中，請複製一份並重新命名為config.xml 放到執行程式的(.exe) 同層目錄夾，程式執行時即會讀取設定檔的內容進行運作。
 
 <b>defalut_config.xml</b>
 
